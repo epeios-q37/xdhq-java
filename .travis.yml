@@ -1,19 +1,37 @@
-# xdhq.travis
+# java.travis
 
-os:
-- linux
-- osx
+matrix:
+  include: 
+    - os: linux
+      dist: trusty
+      compiler: g++
+    - os: linux
+      dist: trusty
+      compiler: g++
+      jdk: openjdk7
+    - os: linux
+      compiler: clang++
+      dist: trusty
+# Probably due to 'language' setting below, despite above line, the 'CXX' environment have to be set .
+      env: CXX=clang++
+    - os: osx
+      compiler: clang++  
 
-dist: trusty
+language: java
 
-language: node_js
-
-node_js:
-- "4"
-- "5"
-- "6"
-- "7"
-- "8"
+# Disabled to facilitate for deplying the 'Atlas' toolkit.
+# To reenable for no 'Atlas' toolkit software.
+script_:
+- git clone https://github.com/epeios-q37/jreq.git
+- pushd jreq
+- make -j
+- java -Djava.library.path=. JREqTest
+# - java JREqTest
+- cp libjreq.* jreq.xcfg jreq.xlcl ..
+- popd
+- make -j
+- java -Djava.library.path=. XDHqTest
+# - java XDHqTest
 
 # To disable building on tags. Tags are supposed to begin with 'v' and only containing digits.
 branches:

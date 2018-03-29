@@ -1,10 +1,16 @@
-# xdhq.appveyor
+# java.appveyor
 
 environment:
   version: 20180328
   affix: xdhqjre
-
-skip_tags: true	
+  ext: dll
+#  zip: $(affix)jre-v$(version)-win-java-v$(jdk_ver)-$(platform).zip
+  zip: $(affix)jre-v$(version)-win-$(platform).zip
+  matrix:
+  ## Only '1.0.6, as currently no testing, and JNI cpmatble with higher versions
+    - jdk_ver: "1.8.0"
+    # - jdk_ver: "1.7.0"
+    # - jdk_ver: "1.6.0"
 
 platform:
 - x86
@@ -13,32 +19,85 @@ platform:
 configuration: Release
 
 os :
-# - Visual Studio 2013
-# - Visual Studio 2015
 - Visual Studio 2017
+# - Visual Studio 2015
+# - Visual Studio 2013
 
+## Disabled to facilite 'Atlas' toolkit deployment.
+## To reneable in the future for no 'Atlas' related software.
+# test_script:
+# - C:/%JDK%javac src/*.java -d .
+# - echo "********** 'XDHq' TEST BEGIN **********" && C:/%JDK%java XDHqTest && echo "********** 'XDHq' TEST END **********"
+
+# matrix:
+  # allow_failures:
+  # - os: Visual Studio 2017
+
+skip_tags: true
+
+## Disabled to facilite 'Atlas' toolkit deployment.
+## To reneable in the future for no 'Atlas' related software.
+# before_build:
+# - git clone https://github.com/epeios-q37/jreq.git
+# - cd jreq
+# - msbuild jreq.vcxproj
+# - copy jreq.dll ..
+# - copy jreq.xcfg ..
+# - copy jreq.xlcl ..
+# - set oddity=
+# - if "%platform%"=="x86" set oddity= (x86)
+# - set JDK="Program Files%oddity%/Java/jdk%jdk_ver%/bin/"
+# - echo %JDK%
+# - C:/%JDK%javac src/*.java -d .
+# - echo "***** 'JREq' TEST BEGIN *****" && C:/%JDK%java JREqTest && echo "***** 'JREq' TEST END *****"
+# - cd ..
 
 after_build:
+# ".zip" part.
+- set dir=%affix%-java-%version%-$%platform%
+- mkdir %dir% || exit 1
+- copy %affix%jre.%ext% %dir%\%affix%jre.%ext% || exit 1
+- 7z a %zip% %dir%
+# '.tar.gz' part, for the NPM installation ('node-pre-gyp') of the 'Atlas' toolkit component.
 - if "%platform%"=="x86" set platform=ia32
-- echo | set /p="%affix%-v%version%" >>tmpfile.tmp || true
+- echo | set /p="%affix%jre-v%version%" >>tmpfile.tmp || true
 - echo | set /p="-win32-" >>tmpfile.tmp || true
 - echo | set /p="%platform%" >>tmpfile.tmp || true
 - set /p addon= <tmpfile.tmp
 - echo .%addon%.
 - set dir=win32-%platform%
 - mkdir %dir%
-- copy %affix%.dll %dir%
+- copy %affix%jre.dll %dir%
 # It MUST be '.tar.gz' to be retrieved by 'node-pre-gyp' when installed with 'npm' !
 - 7z a -ttar -so dummy %dir% | 7z a -si %addon%.tar.gz
 
+
 artifacts:
-- path: '*.tar.gz'
+- path: $(zip)
+- name: tgz
+  path: '*.tar.gz'
 
 deploy:
-  tag: v$(version)
-  description: ''
-  provider: GitHub
-  auth_token:
-    secure: kKebvPLjikQbZ7E1Vm8omoYc9K0wOcKxjWsglp3+D4fV9ev/FaWr8ZBI+AseOTis
-  draft: false
-  prerelease: false
+  - provider: GitHub
+    tag: v$(version)
+    description: ''
+    auth_token:
+      secure: kKebvPLjikQbZ7E1Vm8omoYc9K0wOcKxjWsglp3+D4fV9ev/FaWr8ZBI+AseOTis
+    draft: false
+    prerelease: false
+    artifact: tgz
+    on:
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      jdk_ver: "1.6.0"
+
+  - provider: GitHub
+    tag: v$(version)
+    description: ''
+    auth_token:
+      secure: kKebvPLjikQbZ7E1Vm8omoYc9K0wOcKxjWsglp3+D4fV9ev/FaWr8ZBI+AseOTis
+    draft: false
+    prerelease: false
+    artifact: $(zip)
+    on:
+      APPVEYOR_BUILD_WORKER_IMAGE: Visual Studio 2017
+      jdk_ver: "1.6.0"
