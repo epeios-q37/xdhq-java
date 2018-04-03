@@ -54,7 +54,7 @@ skip_tags: true
 
 after_build:
 # ".zip" part.
-- set dir=%affix%-java-%version%-$%platform%
+- set dir=%affix%-java-%version%-%platform%
 - mkdir %dir% || exit 1
 - copy %affix%jre.%ext% %dir%\%affix%jre.%ext% || exit 1
 - 7z a %zip% %dir%
