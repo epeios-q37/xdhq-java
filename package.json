@@ -1,14 +1,14 @@
 {
   "name": "xdhqjre",
-  "version": "2018.3.28",
+  "version": "2018.4.7",
   "author": "Claude SIMON (http://q37.info/contact/)",
   "description": "",
   "main": "XDHq.js",
   "binary": {
     "module_name": "xdhqjre",
     "module_path": "./",
-    "remote_path": "./epeios-q37/xdhq-java/releases/download/v20180328/",
-    "package_name": "{module_name}-v20180328-{platform}-{arch}.tar.gz",
+    "remote_path": "./epeios-q37/xdhq-java/releases/download/v20180407/",
+    "package_name": "{module_name}-v20180407-{platform}-{arch}.tar.gz",
     "host": "https://github.com"
   },
   "dependencies": {
