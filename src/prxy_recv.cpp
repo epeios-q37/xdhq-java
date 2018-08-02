@@ -150,6 +150,26 @@ namespace {
 		focus::R( Flow );
 	}
 
+	void Launch_(
+		flw::sRFlow &Flow,
+		prxy_recv::eType Type,
+		rReturn &Return )
+	{
+		switch ( Type ) {
+		case tVoid:
+			break;
+		case tString:
+			prtcl::Get( Flow, Return.StringToSet() );
+			break;
+		case tStrings:
+			prtcl::Get( Flow, Return.StringsToSet() );
+			break;
+		default:
+			qRGnr();
+			break;
+		}
+	}
+
 }
 
 #define H( name )\
@@ -159,6 +179,7 @@ namespace {
 
 void prxy_recv::Recv(
 	eRequest Request,
+	prxy_recv::eType ReturnTypeForNewHandling,
 	flw::sRFlow &Flow,
 	rReturn &Return )
 {
@@ -186,6 +207,9 @@ void prxy_recv::Recv(
 	H( GetProperty );
 	H( SetProperty );
 	H( Focus );
+	case rLaunch:
+		Launch_( Flow, ReturnTypeForNewHandling, Return );
+		break;
 	default:
 		qRGnr();
 		break;

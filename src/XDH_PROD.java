@@ -19,44 +19,17 @@
 
 package info.q37.xdhq;
 
-import info.q37.xdhq.XDHq;
+import info.q37.jreq.JRE;
 
-public class Tree {
-	private Object core;
-
-	public Tree() {
-		core = XDHq.call(1);
+public class XDH_PROD extends XDH_SHRD {
+	static private long launcher;
+	static {
+		launcher = JRE.register( "xdhq" );
 	}
-
-	public void finalize() {
-		XDHq.call(2, core);
+	static public Object call(int index, Object... objects) {
+		return JRE.call( launcher, index, objects );
 	}
-
-	public void pushTag(String name) {
-		XDHq.call(3, core, name);
-	}
-
-	public void popTag() {
-		XDHq.call(4, core);
-	}
-
-	public void putValue(String value) {
-		XDHq.call(5, core, value);
-	}
-
-	public void putAttribute(String name, String value) {
-		XDHq.call(6, core, name, value);
-	}
-
-	public void putAttribute(String name, boolean value) {
-		putAttribute( name, String.valueOf( value ) );
-	}
-
-	public void putAttribute(String name, int value ) {
-		putAttribute( name, String.valueOf( value ) );
-	}
-
-	Object core() {
-		return core;
+	static public void launch( String newSessionAction ) {
+		JRE.call( launcher, 1, "53752", newSessionAction );
 	}
 }

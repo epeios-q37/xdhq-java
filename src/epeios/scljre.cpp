@@ -1,5 +1,5 @@
 /*
-	Copyright (C) 1999-2017 Claude SIMON (http://q37.info/contact/).
+	Copyright (C) 1999 Claude SIMON (http://q37.info/contact/).
 
 	This file is part of the Epeios framework.
 
@@ -128,7 +128,8 @@ namespace {
 
 n4all::cLauncher *scln4a::SCLN4ARegister(
 	n4all::cRegistrar &RegistrarCallback,
-	void *UP )
+	void *UP,
+	const scli::sInfo *&Info )
 {
 	n4all::cLauncher *Launcher = NULL;
 qRH
@@ -144,7 +145,7 @@ qRB
 	Assign_( Shared.Throw, Throw_ );
 
 	Registrar.Init( RegistrarCallback );
-	SCLJRERegister( Registrar );
+	Info = &SCLJRERegister( Registrar );
 
 	Launcher = new sLauncher_;
 

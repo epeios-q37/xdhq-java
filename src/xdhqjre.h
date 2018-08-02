@@ -20,6 +20,8 @@
 #ifndef XDHQJRE_INC_
 # define XDHQJRE_INC_
 
+# include "scli.h"
+
 # define NAME_MC			"XDHqJRE"
 # define NAME_LC			"xdhqjre"
 # define NAME_UC			"XDHQJRE"
@@ -29,5 +31,7 @@
 # define OWNER_NAME			"Claude SIMON"
 # define OWNER_CONTACT		"http://q37.info/contact/"
 # define COPYRIGHT			COPYRIGHT_YEARS " " OWNER_NAME " (" OWNER_CONTACT ")"
+
+SCLI_DEC( xdhqjre );
 
 #endif

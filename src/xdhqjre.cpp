@@ -28,6 +28,8 @@
 #include "lcl.h"
 #include "scljre.h"
 
+SCLI_DEF( xdhqjre, NAME_LC, "XDHq" );
+
 void scljre::SCLJREInfo( txf::sWFlow &Flow )
 {
 	Flow << NAME_MC << " v" << VERSION << txf::nl
@@ -55,17 +57,10 @@ namespace {
 	}
 }
 
-void scljre::SCLJRERegister( scljre::sRegistrar &Registrar )
+const scli::sInfo &scljre::SCLJRERegister( scljre::sRegistrar &Registrar )
 {
 	Registrar.Register( ReturnArgument_ );	// 0
-	Registrar.Register( treep::New, treep::Delete, treep::PushTag, treep::PopTag, treep::PutValue, treep::PutAttribute );	// 1 - 6
-	Registrar.Register( xdhp::Listen, xdhp::New, xdhp::Set, xdhp::GetAction, xdhp::Execute );	// 7 - 11
-	Registrar.Register( xdhp::Alert, xdhp::Confirm, xdhp::SetLayout, xdhp::GetContents, xdhp::SetContents, xdhp::DressWidgets ); //12 - 17
-	Registrar.Register( xdhp::AddClasses, xdhp::RemoveClasses, xdhp::ToggleClasses, xdhp::EnableElements, xdhp::DisableElements );	// 18 - 22.
-	Registrar.Register( xdhp::SetAttribute, xdhp::GetAttribute, xdhp::RemoveAttribute, xdhp::SetProperty, xdhp::GetProperty );	// 23 - 27.
-	Registrar.Register( xdhp::Focus );	// 28
+	Registrar.Register( xdhp::Listen, xdhp::New, xdhp::Set, xdhp::GetAction, xdhp::Launch );	// 1 - 5
 
+	return xdhqjre::Info;
 }
-
-const char *sclmisc::SCLMISCTargetName = NAME_LC;
-const char *sclmisc::SCLMISCProductName = NAME_MC;

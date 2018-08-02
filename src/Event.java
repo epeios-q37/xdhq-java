@@ -17,7 +17,7 @@
 	along with XDHq. If not, see <http://www.gnu.org/licenses/>.
 */
 
-package info.q37.xdhq;
+package info.q37.xdhq.dom;
 
 public class Event {
 	public String
