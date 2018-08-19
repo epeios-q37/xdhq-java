@@ -22,7 +22,7 @@
   <Import Project="Windows.targets"/>
   <Import Project="Details.props"/>
   <PropertyGroup Label="Globals">
-    <ProjectGuid>00b4bbf4-0c6f-4cb8-97d5-22052ccc2ffb</ProjectGuid>
+    <ProjectGuid>d610162a-1169-4121-95c8-54fceb67cfd9</ProjectGuid>
     <RootNamespace>xdhqjre</RootNamespace>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props"/>
@@ -63,14 +63,9 @@
   <ItemGroup>
     <ClCompile Include="src/xdhqjre.cpp"/>
     <ClCompile Include="src/registry.cpp"/>
-    <ClCompile Include="src/treep.cpp"/>
     <ClCompile Include="src/xdhp.cpp"/>
     <ClCompile Include="src/prtcl.cpp"/>
     <ClCompile Include="src/proxy.cpp"/>
-    <ClCompile Include="src/prxy_cmn.cpp"/>
-    <ClCompile Include="src/prxy_recv.cpp"/>
-    <ClCompile Include="src/prxy_send.cpp"/>
-    <ClCompile Include="src/tree.cpp"/>
     <ClCompile Include="src/epeios/ags.cpp"/>
     <ClCompile Include="src/epeios/aem.cpp"/>
     <ClCompile Include="src/epeios/bch.cpp"/>

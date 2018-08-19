@@ -1,7 +1,7 @@
 # java.appveyor
 
 environment:
-  version: 20180807
+  version: 20180816
   affix: xdhq
   ext: dll
 #  zip: $(affix)jre-v$(version)-win-java-v$(jdk_ver)-$(platform).zip

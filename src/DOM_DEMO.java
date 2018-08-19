@@ -31,6 +31,8 @@ public class DOM_DEMO extends DOM_SHRD {
 	static private String token = "";
 	private Socket socket;
 	private boolean firstLaunch = true;
+	static private String protocolLabel = "712a58bf-2c9a-47b2-ba5e-d359a99966de";
+	static private String protocolVersion = "0";
 
 	private void writeSize_( int size, OutputStream stream ) throws Exception {
 		byte data[] = new byte[8];
@@ -117,25 +119,9 @@ public class DOM_DEMO extends DOM_SHRD {
 		return getStrings_( new InputStreamReader( socket.getInputStream() ) );
 	}
 
-	private String getQuery_( InputStreamReader reader ) throws Exception {
-		String query = "";
-		int datum = reader.read();
-
-		while ( datum != 0 ) {
-			query += (char)datum;
-			datum = reader.read();
-		}
-
-		return query;
-	}
-
-	private String getQuery_() throws Exception {
-		return getQuery_( new InputStreamReader( socket.getInputStream() ) );
-	}
-
 	public DOM_DEMO() throws Exception {
 		try {
-		socket = new Socket( address, port );
+			socket = new Socket( address, port );
 		} catch ( Exception e ) {
 			System.out.println( "Unable to connect to " + address + ":" + port + " !!!");
 			System.exit( 1 );
@@ -145,12 +131,10 @@ public class DOM_DEMO extends DOM_SHRD {
 		InputStreamReader reader = new InputStreamReader( socket.getInputStream() );
 
 		writeString_( token, output );
-
 		output.flush();
 
 		if ( "".equals( token ) ) {
 			token = getString_( reader );
-
 
 			if ( "".equals( token ) )
 				throw new Exception( "Invalid connection information !!!");
@@ -165,14 +149,11 @@ public class DOM_DEMO extends DOM_SHRD {
 		} else {
 			if ( !getString_( reader ).equals( token ) )
 				throw new Exception( "Unmatched token !!!");
-
 		}
 
-		getString_( reader );	// Protocol version.
-
-		output.write(new String( "StandBy_1" ).getBytes());
-		output.write( 0 );
-
+		getString_( reader );	// Language.
+		writeString_( protocolLabel, output );
+		writeString_( protocolVersion, output );
 		output.flush();
 	}
 
@@ -187,10 +168,6 @@ public class DOM_DEMO extends DOM_SHRD {
 				firstLaunch = false;
 
 			InputStreamReader reader = new InputStreamReader( socket.getInputStream() );
-			String query = getQuery_( reader );
-
-			if ( !"Launch_1".equals( query ) )
-				throw new Exception( "Unknown query '" + query + "' !!!" );
 
 			event.id = getString_( reader );
 
@@ -229,11 +206,6 @@ public class DOM_DEMO extends DOM_SHRD {
 			output.flush();
 
 			InputStreamReader reader = new InputStreamReader( socket.getInputStream() );
-
-			String query = getQuery_( reader );
-
-			if ( !"Ready_1".equals( query ) )
-				throw new Exception( "Unknown query '" + query + "' !!!" );
 
 			switch ( type ) {
 			case VOID:

@@ -20,7 +20,6 @@
 #include "xdhp.h"
 
 #include "registry.h"
-#include "treep.h"
 
 #include "proxy.h"
 
@@ -205,12 +204,6 @@ qRE;
 	return scljre::Null();
 }
 
-#define BEGIN( request )\
-
-#define SWITCH	Data.Sent.WriteEnd();Data.Recv.ReadBegin(); proxy::rReturn &Return = Data.Recv.Return
-
-#define END	Data.Recv.ReadEnd()
-
 SCLJRE_F( xdhp::Launch )
 {
 	scljre::sJObject Buffer = NULL;
@@ -219,15 +212,14 @@ qRH;
 qRB;
 	rData_ &Data = GetData_( Caller );
 	Data.Sent.WriteBegin();
-	Data.Request = prxy_cmn::rLaunch;
-	proxy::rNewArguments &Arguments = Data.Sent.NewArguments;
+	proxy::rArguments &Arguments = Data.Sent.Arguments;
 
 	Arguments.Init();
 
 	Caller.Get( Arguments.Command );
 
 	Type.Init( Caller.GetObject() );
-	Data.ReturnType = (prxy_recv::eType)Type.IntValue();
+	Data.SetReturnType( (proxy::eType)Type.IntValue() );
 
 	Caller.Get( Arguments.Strings );
 	Caller.Get( Arguments.XStrings );
@@ -236,14 +228,14 @@ qRB;
 	Data.Recv.ReadBegin();
 	proxy::rReturn &Return = Data.Recv.Return;
 
-	switch ( Data.ReturnType ) {
-	case prxy_recv::tVoid:
+	switch ( Data.GetReturnType() ) {
+	case proxy::tVoid:
 		Buffer = scljre::Null();
 		break;
-	case prxy_recv::tString:
+	case proxy::tString:
 		Buffer = scljre::String( Env, Return.GetString() );
 		break;
-	case prxy_recv::tStrings:
+	case proxy::tStrings:
 		Buffer = scljre::Strings( Env, Return.GetStrings() );
 		break;
 	default:
